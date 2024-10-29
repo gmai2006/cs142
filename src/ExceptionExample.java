@@ -1,27 +1,37 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ExceptionExample {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        boolean error = false;
-        do {
-            try {
-                System.out.println("Please enter a number:");
-                int input = getNumber(scanner.nextLine());
-                System.out.println(input);
-                error = false;
-            } catch (NumberFormatException nfe) {
-                error = true;
+        int result = 0;
+        try (Scanner scanner = new Scanner(System.in)) {
+            while ((result = readInputFromConsole(scanner)) != 0) {
+                System.out.println(result);
             }
-        } while (error);
+        }
     }
 
-    static int getNumber(String value) throws NumberFormatException {
+    public static int readInputFromConsole(Scanner scanner) {
+        int number = 0;
+        System.out.println("Enter a number:");
+        do {
+            try {
+                number = readInput(scanner);
+            } catch (NumberFormatException ex) {
+                number = -1;
+            }
+        } while (number == -1);
+        return number;
+    }
+
+    public static int readInput(Scanner scanner) throws NumberFormatException {
+        String input = "";
         try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException nfe) {
-            System.err.println("Invalid input " + value);
-            throw new NumberFormatException("Invalid input " + value);
+            input = scanner.nextLine();
+        }  catch (NumberFormatException ex) {
+            System.out.println("Invalid input: " + input + " Please enter a number");
+            throw ex;
         }
+        return Integer.valueOf(input);
     }
 }

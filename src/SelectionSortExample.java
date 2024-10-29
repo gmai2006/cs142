@@ -1,76 +1,66 @@
 import java.util.Arrays;
+import java.util.List;
 
 public class SelectionSortExample {
     public static void main(String[] args) {
-        int[] arr = {1,3,4,7};
-        iterativeSelectionSort(arr);
-        System.out.println(Arrays.toString(iterativeSelectionSort(new int [] {})));
-        System.out.println(Arrays.toString(iterativeSelectionSort(new int[] {1})));
-        System.out.println(Arrays.toString(iterativeSelectionSort(new int[] {1, 1})));
-        System.out.println(Arrays.toString(arr));
+        List<Integer> test = Arrays.asList(56,45,22,78,1,23);
+        SelectionSortExample.sort(test);
+        System.out.println(test.toString().equals(Arrays.asList(1,22,23,45,56,78).toString()));
 
-        System.out.println(Arrays.toString(iterativeSelectionSort2(new int [] {})));
-        System.out.println(Arrays.toString(iterativeSelectionSort2(new int[] {1})));
-        System.out.println(Arrays.toString(iterativeSelectionSort2(new int[] {1, 1})));
-        System.out.println(Arrays.toString(arr));
+        List<Integer> empty = Arrays.asList();
+        SelectionSortExample.sort(empty);
+        System.out.println(empty.toString().equals("[]"));
 
-        System.out.println(Arrays.toString(recursiveSelectionSort(new int [] {})));
-        System.out.println(Arrays.toString(recursiveSelectionSort(new int[] {1})));
-        System.out.println(Arrays.toString(recursiveSelectionSort(new int[] {1, 1})));
-        System.out.println(Arrays.toString(arr));
+        List<Integer> test2 = Arrays.asList(56,45,22,78,1,23);
+        SelectionSortExample.sortRecursive(test2);
+        System.out.println(test2.toString().equals(test.toString()));
+
     }
 
-    static int[] recursiveSelectionSort(int[] arr) {
-        return recursiveSelectionSortInternal(arr, 0, arr.length - 1);
-    }
-
-    static private int[] recursiveSelectionSortInternal(int[] arr, int start, int end) {
-        if (start >= end) return arr;
-        //1. find the min index
-        //2. swap with the element at the start index
-        //3. call itself again with the start = start + 1
-        int minIndex = findMinIndex(arr, start);
-        swap(arr, start, minIndex);
-        return recursiveSelectionSortInternal(arr, start + 1, end);
-    }
-    static int[] iterativeSelectionSort(int[] arr) {
-        for (int index = 0; index < arr.length; index++) {
-            int minIndex = findMinIndex(arr, index);
-            swap(arr, minIndex, index);
+    /**
+     * Find the smallest value in the array
+     * ◦
+     * Swap it with the first element
+     * ◦
+     * Find the next smallest value in the array
+     * ◦
+     * Swap it with the second element
+     * @param list
+     *
+     * [1,4,5,6]
+     */
+    public static void sort(List<Integer> list) {
+        for (int x = 0; x < list.size(); x++) {
+            int smallestIndex = findSmallestValueIndex(list, x);
+            swap(list, x, smallestIndex);
         }
-        return arr;
     }
 
-    static int[] iterativeSelectionSort2(int[] arr) {
-        for (int index = 0; index < arr.length; index++) {
-            int min = arr[index];
-            int minIndex = index;
-            for (int innerIndex = index; innerIndex < arr.length; innerIndex++) {
-                if (arr[innerIndex] < min) {
-                    min = arr[innerIndex];
-                    minIndex = innerIndex;
-                }
-            }
-            swap(arr, index, minIndex);
-        }
-        return arr;
+    public static void sortRecursive(List<Integer> list) {
+        sortRecursive(list, 0);
     }
 
-    static void swap(int[] arr, int index1, int index2) {
-        int tmp = arr[index1];
-        arr[index1] = arr[index2];
-        arr[index2] = tmp;
+    private static void sortRecursive(List<Integer> list, int index) {
+        if (list.size() <= 1 || index >= list.size()) return;
+        int smallestIndex = findSmallestValueIndex(list, index);
+        swap(list, index, smallestIndex);
+        sortRecursive(list, index + 1);
     }
 
-    static int findMinIndex(int[] arr, int start) {
-        int min = arr[start];
-        int minIndex = start;
-        for (int index = start + 1; index < arr.length; index++) {
-            if (arr[index] < min) {
-                min = arr[index];
-                minIndex = index;
+    private static void swap(List<Integer> list, int sourceIndex, int sinkIndex) {
+        int tmp = list.get(sourceIndex);
+        list.set(sourceIndex, list.get(sinkIndex));
+        list.set(sinkIndex, tmp);
+    }
+    private static int findSmallestValueIndex(List<Integer> list, int startingIndex) {
+        Integer smallest = Integer.MAX_VALUE;
+        int index = 0;
+        for (int x = startingIndex; x < list.size(); x++) {
+            if (list.get(x) < smallest) {
+                smallest = list.get(x);
+                index = x;
             }
         }
-        return minIndex;
+        return index;
     }
 }

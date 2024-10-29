@@ -12,7 +12,7 @@ public class AlgorithmPerformanceExample {
         long bubbleendTime = System.nanoTime();
 
         long selectionStartTime = System.nanoTime();
-        SelectionSortExample.recursiveSelectionSort(createRandomArray(1000));
+//        SelectionSortExample.recursiveSelectionSort(createRandomArray(1000));
         long selectionendTime = System.nanoTime();
 
         long insertionStartTime = System.nanoTime();
